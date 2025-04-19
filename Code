@@ -1,0 +1,57 @@
+Recursive soln 
+class Solution {
+    public int minimumTotal(List<List<Integer>> triangle) {
+        int rows = triangle.size();
+        int[][] arr = new int[rows][];
+        
+        for (int i = 0; i < rows; i++) {
+            List<Integer> row = triangle.get(i);
+            arr[i] = new int[row.size()];
+            for (int j = 0; j < row.size(); j++) {
+                arr[i][j] = row.get(j);
+            }
+        }
+        return minTotal(0,0,arr);
+    }
+    private int minTotal(int i,int j,int arr[][]){
+        int n = arr.length;
+        if(i == n-1){
+            return arr[n-1][j];
+        }
+        int down = minTotal(i+1,j,arr);
+        int diag = minTotal(i+1,j+1,arr);
+        return arr[i][j] + Math.min(down,diag);
+    }
+}
+
+Memoisation
+class Solution {
+    public int minimumTotal(List<List<Integer>> triangle) {
+        int rows = triangle.size();
+        int[][] arr = new int[rows][];
+        int[][] dp = new int[rows][];
+        
+        for (int i = 0; i < rows; i++) {
+            List<Integer> row = triangle.get(i);
+            arr[i] = new int[row.size()];
+            dp[i] = new int[row.size()];
+            for (int j = 0; j < row.size(); j++) {
+                arr[i][j] = row.get(j);
+                dp[i][j] = -1;
+            }
+        }
+        return minTotal(0,0,arr,dp);
+    }
+    private int minTotal(int i,int j,int arr[][],int dp[][]){
+        int n = arr.length;
+        if(i == n-1){
+            return arr[n-1][j];
+        }
+        if(dp[i][j] != -1){
+            return dp[i][j];
+        }
+        int down = minTotal(i+1,j,arr,dp);
+        int diag = minTotal(i+1,j+1,arr,dp);
+        return dp[i][j] = arr[i][j] + Math.min(down,diag);
+    }
+}
